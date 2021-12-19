@@ -1,0 +1,23 @@
+version: 1
+applications:
+  - frontend:
+      phases:
+        preBuild:
+          commands:
+            - npm install
+            - cd ../..
+            - npm install
+        build:
+          commands:
+            # This step will build app with Nx framework
+            - npx nx build my-next --prod
+            # This step will build/update SSR resources(S3, Cloudfront, Lambda@Edge)
+            - cd apps/my-next
+      artifacts:
+        baseDirectory: ../../dist/apps/my-next/.next
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - node_modules/**/*
+    appRoot: apps/my-next
